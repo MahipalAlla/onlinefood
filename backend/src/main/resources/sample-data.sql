@@ -3,22 +3,41 @@
 
 -- Insert sample restaurants
 INSERT INTO restaurants (name, description, address, phone, image_url, rating, delivery_time, delivery_fee, is_open) VALUES
-('Pizza Palace', 'Authentic Italian pizzas with fresh ingredients', '123 Main Street, Downtown', '555-0100', 'https://images.unsplash.com/photo-1513104890138-7c749659a591', 4.5, 30, 2.99, true),
-('Burger House', 'Gourmet burgers and craft beers', '456 Oak Avenue, Midtown', '555-0200', 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd', 4.3, 25, 1.99, true),
-('Sushi Express', 'Fresh sushi and Japanese cuisine', '789 Pine Road, Eastside', '555-0300', 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351', 4.7, 35, 3.99, true),
-('Taco Fiesta', 'Authentic Mexican street food', '321 Elm Street, Westside', '555-0400', 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47', 4.4, 20, 1.49, true),
-('Pasta Paradise', 'Homemade pasta and Italian classics', '654 Maple Drive, Uptown', '555-0500', 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9', 4.6, 28, 2.49, true);
+('Biryani House', 'Authentic Hyderabadi & Lucknowi Biryani - Aromatic rice with tender meat', '123 Spice Street, Downtown', '555-0100', 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8', 4.8, 35, 2.99, true),
+('Pizza Palace', 'Authentic Italian pizzas with fresh ingredients & wood-fired oven', '456 Main Street, Midtown', '555-0200', 'https://images.unsplash.com/photo-1513104890138-7c749659a591', 4.5, 30, 2.99, true),
+('Royal Biryani Paradise', 'Premium biryani varieties - Chicken, Mutton, Veg & Seafood', '789 Royal Road, Eastside', '555-0300', 'https://images.unsplash.com/photo-1633945274405-b6c8069047b0', 4.7, 40, 3.49, true),
+('Pizzeria Italiano', 'New York style & Neapolitan pizzas with authentic Italian taste', '321 Pizza Lane, Westside', '555-0400', 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002', 4.6, 25, 1.99, true),
+('Biryani Express', 'Quick & delicious biryani delivery - Dum cooked perfection', '654 Express Way, Uptown', '555-0500', 'https://images.unsplash.com/photo-1642821373181-696a54913e93', 4.4, 30, 2.49, true),
+('Pizza Corner', 'Loaded pizzas with unlimited toppings & cheese burst options', '987 Corner Street, Downtown', '555-0600', 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38', 4.3, 28, 2.29, true);
 
--- Insert menu items for Pizza Palace (restaurant_id = 1)
+-- Insert menu items for Biryani House (restaurant_id = 1)
 INSERT INTO menu_items (name, description, price, image_url, category, is_vegetarian, is_available, restaurant_id) VALUES
-('Margherita Pizza', 'Classic tomato sauce, fresh mozzarella, and basil', 12.99, 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002', 'Pizza', true, true, 1),
-('Pepperoni Pizza', 'Loaded with pepperoni and mozzarella cheese', 14.99, 'https://images.unsplash.com/photo-1628840042765-356cda07504e', 'Pizza', false, true, 1),
-('Veggie Supreme', 'Bell peppers, onions, mushrooms, olives, and tomatoes', 13.99, 'https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f', 'Pizza', true, true, 1),
-('BBQ Chicken Pizza', 'BBQ sauce, grilled chicken, red onions, and cilantro', 15.99, 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38', 'Pizza', false, true, 1),
-('Caesar Salad', 'Fresh romaine lettuce with caesar dressing and croutons', 8.99, 'https://images.unsplash.com/photo-1546793665-c74683f339c1', 'Salad', true, true, 1),
-('Garlic Bread', 'Toasted bread with garlic butter and herbs', 5.99, 'https://images.unsplash.com/photo-1573140401552-388e3ead0b5e', 'Sides', true, true, 1);
+('Hyderabadi Chicken Biryani', 'Aromatic basmati rice with tender chicken, saffron & spices', 12.99, 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8', 'Biryani', false, true, 1),
+('Mutton Dum Biryani', 'Slow-cooked mutton with fragrant rice & caramelized onions', 15.99, 'https://images.unsplash.com/photo-1633945274405-b6c8069047b0', 'Biryani', false, true, 1),
+('Veg Biryani', 'Mixed vegetables with aromatic rice & Indian spices', 9.99, 'https://images.unsplash.com/photo-1642821373181-696a54913e93', 'Biryani', true, true, 1),
+('Prawns Biryani', 'Succulent prawns cooked with basmati rice & coastal spices', 16.99, 'https://images.unsplash.com/photo-1589302168068-964664d93dc0', 'Biryani', false, true, 1),
+('Egg Biryani', 'Boiled eggs layered with spiced rice & fried onions', 8.99, 'https://images.unsplash.com/photo-1645177628172-a94c1f96e6db', 'Biryani', true, true, 1),
+('Raita', 'Cooling yogurt with cucumber & spices', 2.99, 'https://images.unsplash.com/photo-1601050690597-df0568f70950', 'Sides', true, true, 1);
 
--- Insert menu items for Burger House (restaurant_id = 2)
+-- Insert menu items for Pizza Palace (restaurant_id = 2)
+INSERT INTO menu_items (name, description, price, image_url, category, is_vegetarian, is_available, restaurant_id) VALUES
+('Margherita Pizza', 'Classic tomato sauce, fresh mozzarella, and basil', 12.99, 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002', 'Pizza', true, true, 2),
+('Pepperoni Pizza', 'Loaded with pepperoni and mozzarella cheese', 14.99, 'https://images.unsplash.com/photo-1628840042765-356cda07504e', 'Pizza', false, true, 2),
+('Veggie Supreme', 'Bell peppers, onions, mushrooms, olives, and tomatoes', 13.99, 'https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f', 'Pizza', true, true, 2),
+('BBQ Chicken Pizza', 'BBQ sauce, grilled chicken, red onions, and cilantro', 15.99, 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38', 'Pizza', false, true, 2),
+('Four Cheese Pizza', 'Mozzarella, parmesan, gorgonzola & ricotta cheese', 16.99, 'https://images.unsplash.com/photo-1513104890138-7c749659a591', 'Pizza', true, true, 2),
+('Garlic Bread', 'Toasted bread with garlic butter and herbs', 5.99, 'https://images.unsplash.com/photo-1573140401552-388e3ead0b5e', 'Sides', true, true, 2);
+
+-- Insert menu items for Royal Biryani Paradise (restaurant_id = 3)
+INSERT INTO menu_items (name, description, price, image_url, category, is_vegetarian, is_available, restaurant_id) VALUES
+('Royal Chicken Biryani', 'Premium chicken biryani with saffron & dry fruits', 14.99, 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8', 'Biryani', false, true, 3),
+('Lucknowi Mutton Biryani', 'Awadhi style mutton biryani with aromatic spices', 17.99, 'https://images.unsplash.com/photo-1633945274405-b6c8069047b0', 'Biryani', false, true, 3),
+('Paneer Biryani', 'Cottage cheese cubes with fragrant basmati rice', 11.99, 'https://images.unsplash.com/photo-1642821373181-696a54913e93', 'Biryani', true, true, 3),
+('Fish Biryani', 'Fresh fish fillets cooked with coastal spices & rice', 15.99, 'https://images.unsplash.com/photo-1589302168068-964664d93dc0', 'Biryani', false, true, 3),
+('Chicken 65 Biryani', 'Spicy chicken 65 layered with biryani rice', 13.99, 'https://images.unsplash.com/photo-1645177628172-a94c1f96e6db', 'Biryani', false, true, 3),
+('Mirchi Ka Salan', 'Spicy curry with green chilies - perfect biryani side', 3.99, 'https://images.unsplash.com/photo-1601050690597-df0568f70950', 'Sides', true, true, 3);
+
+-- Insert menu items for Pizzeria Italiano (restaurant_id = 4)
 INSERT INTO menu_items (name, description, price, image_url, category, is_vegetarian, is_available, restaurant_id) VALUES
 ('Classic Cheeseburger', 'Beef patty, cheddar cheese, lettuce, tomato, pickles', 11.99, 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd', 'Burgers', false, true, 2),
 ('Bacon Deluxe', 'Double beef patty, bacon, cheese, special sauce', 14.99, 'https://images.unsplash.com/photo-1553979459-d2229ba7433b', 'Burgers', false, true, 2),
@@ -56,3 +75,29 @@ INSERT INTO menu_items (name, description, price, image_url, category, is_vegeta
 
 -- Note: You'll need to create users through the registration endpoint
 -- The application will handle password encryption
+
+INSERT INTO menu_items (name, description, price, image_url, category, is_vegetarian, is_available, restaurant_id) VALUES
+('Neapolitan Pizza', 'Traditional Italian pizza with San Marzano tomatoes', 13.99, 'https://images.unsplash.com/photo-1595854341625-f33ee10dbf94', 'Pizza', true, true, 4),
+('Meat Lovers Pizza', 'Pepperoni, sausage, bacon, and ham', 17.99, 'https://images.unsplash.com/photo-1534308983496-4fabb1a015ee', 'Pizza', false, true, 4),
+('Hawaiian Pizza', 'Ham, pineapple, and mozzarella cheese', 14.99, 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38', 'Pizza', false, true, 4),
+('Truffle Mushroom Pizza', 'Wild mushrooms with truffle oil & parmesan', 18.99, 'https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f', 'Pizza', true, true, 4),
+('Buffalo Chicken Pizza', 'Spicy buffalo chicken with ranch drizzle', 16.99, 'https://images.unsplash.com/photo-1513104890138-7c749659a591', 'Pizza', false, true, 4),
+('Bruschetta', 'Toasted bread with tomatoes, garlic & basil', 6.99, 'https://images.unsplash.com/photo-1572695157366-5e585ab2b69f', 'Appetizers', true, true, 4);
+
+-- Insert menu items for Biryani Express (restaurant_id = 5)
+INSERT INTO menu_items (name, description, price, image_url, category, is_vegetarian, is_available, restaurant_id) VALUES
+('Express Chicken Biryani', 'Quick-cooked aromatic chicken biryani', 10.99, 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8', 'Biryani', false, true, 5),
+('Boneless Chicken Biryani', 'Tender boneless chicken with fragrant rice', 12.99, 'https://images.unsplash.com/photo-1633945274405-b6c8069047b0', 'Biryani', false, true, 5),
+('Keema Biryani', 'Minced meat cooked with aromatic spices & rice', 13.99, 'https://images.unsplash.com/photo-1642821373181-696a54913e93', 'Biryani', false, true, 5),
+('Mushroom Biryani', 'Fresh mushrooms with basmati rice & spices', 9.99, 'https://images.unsplash.com/photo-1645177628172-a94c1f96e6db', 'Biryani', true, true, 5),
+('Chicken Tikka Biryani', 'Grilled chicken tikka layered with biryani rice', 14.99, 'https://images.unsplash.com/photo-1589302168068-964664d93dc0', 'Biryani', false, true, 5),
+('Onion Raita', 'Yogurt with onions, tomatoes & spices', 2.49, 'https://images.unsplash.com/photo-1601050690597-df0568f70950', 'Sides', true, true, 5);
+
+-- Insert menu items for Pizza Corner (restaurant_id = 6)
+INSERT INTO menu_items (name, description, price, image_url, category, is_vegetarian, is_available, restaurant_id) VALUES
+('Cheese Burst Pizza', 'Extra cheese with molten cheese crust', 15.99, 'https://images.unsplash.com/photo-1513104890138-7c749659a591', 'Pizza', true, true, 6),
+('Paneer Tikka Pizza', 'Indian fusion with paneer tikka topping', 13.99, 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002', 'Pizza', true, true, 6),
+('Mexican Fiesta Pizza', 'Jalapeños, corn, beans & salsa', 14.99, 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38', 'Pizza', true, true, 6),
+('Chicken Tandoori Pizza', 'Tandoori chicken with Indian spices', 15.99, 'https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f', 'Pizza', false, true, 6),
+('Seafood Supreme Pizza', 'Shrimp, calamari & fish with garlic sauce', 18.99, 'https://images.unsplash.com/photo-1595854341625-f33ee10dbf94', 'Pizza', false, true, 6),
+('Cheesy Garlic Bread', 'Garlic bread loaded with mozzarella', 6.99, 'https://images.unsplash.com/photo-1573140401552-388e3ead0b5e', 'Sides', true, true, 6);

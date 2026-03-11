@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Ordering App</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">🍕 FoodApp</div>
+            <div class="nav-links" id="navLinks">
+                <a href="#home" onclick="showSection('home')">Home</a>
+                <a href="#restaurants" onclick="showSection('restaurants')">Restaurants</a>
+                <a href="#cart" onclick="showSection('cart')">Cart (<span id="cartCount">0</span>)</a>
+                <a href="#orders" onclick="showSection('orders')" id="ordersLink" style="display:none;">My Orders</a>
+                <a href="#login" onclick="showSection('login')" id="loginLink">Login</a>
+                <a href="#register" onclick="showSection('register')" id="registerLink">Register</a>
+                <button onclick="logout()" id="logoutBtn" style="display:none;">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="section hero">
+        <div class="container">
+            <h1>Order Food Online</h1>
+            <p>Delicious meals delivered to your doorstep</p>
+            <button class="btn btn-primary" onclick="showSection('restaurants')">Browse Restaurants</button>
+        </div>
+    </section>
+
+    <!-- Restaurants Section -->
+    <section id="restaurants" class="section" style="display:none;">
+        <div class="container">
+            <h2>Restaurants</h2>
+            <div id="restaurantsList" class="grid"></div>
+        </div>
+    </section>
+
+    <!-- Restaurant Detail Section -->
+    <section id="restaurantDetail" class="section" style="display:none;">
+        <div class="container">
+            <button class="btn" onclick="showSection('restaurants')">← Back to Restaurants</button>
+            <div id="restaurantInfo"></div>
+            <h3>Menu</h3>
+            <div id="menuItems" class="grid"></div>
+        </div>
+    </section>
+
+    <!-- Cart Section -->
+    <section id="cart" class="section" style="display:none;">
+        <div class="container">
+            <h2>Your Cart</h2>
+            <div id="cartItems"></div>
+            <div id="cartSummary"></div>
+        </div>
+    </section>
+
+    <!-- Login Section -->
+    <section id="login" class="section" style="display:none;">
+        <div class="container">
+            <div class="auth-card">
+                <h2>Login</h2>
+                <form onsubmit="login(event)">
+                    <input type="email" id="loginEmail" placeholder="Email" required>
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+                <p>Don't have an account? <a href="#register" onclick="showSection('register')">Register</a></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Register Section -->
+    <section id="register" class="section" style="display:none;">
+        <div class="container">
+            <div class="auth-card">
+                <h2>Register</h2>
+                <form onsubmit="register(event)">
+                    <input type="text" id="regFullName" placeholder="Full Name" required>
+                    <input type="email" id="regEmail" placeholder="Email" required>
+                    <input type="password" id="regPassword" placeholder="Password" minlength="6" required>
+                    <input type="tel" id="regPhone" placeholder="Phone">
+                    <textarea id="regAddress" placeholder="Address" rows="3"></textarea>
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+                <p>Already have an account? <a href="#login" onclick="showSection('login')">Login</a></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Orders Section -->
+    <section id="orders" class="section" style="display:none;">
+        <div class="container">
+            <h2>My Orders</h2>
+            <div id="ordersList"></div>
+        </div>
+    </section>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="/js/app.js"></script>
+</body>
+</html>

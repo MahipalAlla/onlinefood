@@ -31,10 +31,13 @@ public class SecurityConfig {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/", "/index.html", "/css/**", "/js/**", "/images/**").permitAll()
                 .requestMatchers("/api/auth/**", "/api/restaurants/**", "/api/menu/**").permitAll()
+                .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
+            .headers(headers -> headers.frameOptions().disable())
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )

@@ -10,7 +10,94 @@ let currentRestaurant = null;
 document.addEventListener('DOMContentLoaded', () => {
     checkAuth();
     loadRestaurants();
+    loadFeaturedRestaurants();
+    startSlider();
 });
+
+// Slider functionality
+let currentSlideIndex = 0;
+let sliderInterval;
+
+function startSlider() {
+    sliderInterval = setInterval(() => {
+        changeSlide(1);
+    }, 5000); // Auto-advance every 5 seconds
+}
+
+function changeSlide(direction) {
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    
+    slides[currentSlideIndex].classList.remove('active');
+    dots[currentSlideIndex].classList.remove('active');
+    
+    currentSlideIndex += direction;
+    
+    if (currentSlideIndex >= slides.length) {
+        currentSlideIndex = 0;
+    } else if (currentSlideIndex < 0) {
+        currentSlideIndex = slides.length - 1;
+    }
+    
+    slides[currentSlideIndex].classList.add('active');
+    dots[currentSlideIndex].classList.add('active');
+    
+    // Reset timer
+    clearInterval(sliderInterval);
+    startSlider();
+}
+
+function currentSlide(index) {
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    
+    slides[currentSlideIndex].classList.remove('active');
+    dots[currentSlideIndex].classList.remove('active');
+    
+    currentSlideIndex = index;
+    
+    slides[currentSlideIndex].classList.add('active');
+    dots[currentSlideIndex].classList.add('active');
+    
+    // Reset timer
+    clearInterval(sliderInterval);
+    startSlider();
+}
+
+// Load Featured Restaurants
+async function loadFeaturedRestaurants() {
+    try {
+        const response = await fetch(`${API_URL}/restaurants`);
+        const restaurants = await response.json();
+        
+        const container = document.getElementById('featuredRestaurants');
+        
+        if (restaurants.length === 0) {
+            container.innerHTML = '<div class="empty-state"><p>No restaurants available yet</p></div>';
+            return;
+        }
+        
+        // Show only first 3 restaurants as featured
+        const featured = restaurants.slice(0, 3);
+        
+        container.innerHTML = featured.map(restaurant => `
+            <div class="card" onclick="viewRestaurant(${restaurant.id})">
+                <img src="${restaurant.imageUrl || 'https://via.placeholder.com/300x200'}" alt="${restaurant.name}">
+                <div class="card-body">
+                    <h3 class="card-title">${restaurant.name}</h3>
+                    <p class="card-text">${restaurant.description || ''}</p>
+                    <div class="card-meta">
+                        <span>⭐ ${restaurant.rating.toFixed(1)}</span>
+                        <span>🕐 ${restaurant.deliveryTime} min</span>
+                        <span>💵 $${restaurant.deliveryFee.toFixed(2)} delivery</span>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('Error loading featured restaurants:', error);
+    }
+}
 
 // Show Toast
 function showToast(message, type = 'info') {

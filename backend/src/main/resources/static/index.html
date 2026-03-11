@@ -23,12 +23,97 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="section hero">
+    <!-- Hero Section with Slider -->
+    <section id="home" class="section">
+        <div class="hero-slider">
+            <div class="slide active">
+                <div class="slide-content">
+                    <h1>🍕 Get 50% OFF on Your First Order!</h1>
+                    <p>Use code: FIRST50</p>
+                    <button class="btn btn-primary" onclick="showSection('restaurants')">Order Now</button>
+                </div>
+            </div>
+            <div class="slide">
+                <div class="slide-content">
+                    <h1>🍔 Free Delivery on Orders Above $30</h1>
+                    <p>Fast & Fresh delivery to your doorstep</p>
+                    <button class="btn btn-primary" onclick="showSection('restaurants')">Browse Menu</button>
+                </div>
+            </div>
+            <div class="slide">
+                <div class="slide-content">
+                    <h1>🍣 Weekend Special: Buy 1 Get 1 Free</h1>
+                    <p>Valid on selected restaurants</p>
+                    <button class="btn btn-primary" onclick="showSection('restaurants')">Explore Deals</button>
+                </div>
+            </div>
+            <button class="slider-btn prev" onclick="changeSlide(-1)">❮</button>
+            <button class="slider-btn next" onclick="changeSlide(1)">❯</button>
+            <div class="slider-dots">
+                <span class="dot active" onclick="currentSlide(0)"></span>
+                <span class="dot" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+            </div>
+        </div>
+
+        <!-- Offers Section -->
         <div class="container">
-            <h1>Order Food Online</h1>
-            <p>Delicious meals delivered to your doorstep</p>
-            <button class="btn btn-primary" onclick="showSection('restaurants')">Browse Restaurants</button>
+            <h2 class="section-title">🎉 Today's Special Offers</h2>
+            <div class="offers-grid">
+                <div class="offer-card">
+                    <div class="offer-badge">30% OFF</div>
+                    <h3>Pizza Lovers Deal</h3>
+                    <p>Get 30% off on all pizzas</p>
+                    <span class="offer-code">Code: PIZZA30</span>
+                </div>
+                <div class="offer-card">
+                    <div class="offer-badge">BOGO</div>
+                    <h3>Burger Bonanza</h3>
+                    <p>Buy 1 Get 1 Free on burgers</p>
+                    <span class="offer-code">Code: BURGER2X</span>
+                </div>
+                <div class="offer-card">
+                    <div class="offer-badge">25% OFF</div>
+                    <h3>Sushi Sunday</h3>
+                    <p>25% discount on sushi rolls</p>
+                    <span class="offer-code">Code: SUSHI25</span>
+                </div>
+                <div class="offer-card">
+                    <div class="offer-badge">FREE</div>
+                    <h3>Free Dessert</h3>
+                    <p>Free dessert on orders above $40</p>
+                    <span class="offer-code">Code: SWEET40</span>
+                </div>
+            </div>
+
+            <!-- Featured Restaurants -->
+            <h2 class="section-title">⭐ Featured Restaurants</h2>
+            <div id="featuredRestaurants" class="grid"></div>
+
+            <!-- Why Choose Us -->
+            <h2 class="section-title">Why Choose Us?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Fast Delivery</h3>
+                    <p>Get your food delivered in 30 minutes or less</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💳</div>
+                    <h3>Secure Payment</h3>
+                    <p>Multiple payment options with secure checkout</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🍽️</div>
+                    <h3>Quality Food</h3>
+                    <p>Fresh ingredients from top-rated restaurants</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⭐</div>
+                    <h3>Best Ratings</h3>
+                    <p>Trusted by thousands of happy customers</p>
+                </div>
+            </div>
         </div>
     </section>
 

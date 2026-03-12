@@ -11,9 +11,17 @@
     <nav class="navbar">
         <div class="container">
             <div class="nav-brand">
-                <span class="logo-icon">🍕</span>
-                <span class="logo-text">FoodHub</span>
-                <span class="logo-tagline">Delicious Delivered</span>
+                <div class="logo-container">
+                    <span class="logo-icon">🍕</span>
+                    <div class="logo-shine"></div>
+                </div>
+                <div class="logo-text-container">
+                    <span class="logo-text">FoodHub</span>
+                    <span class="logo-tagline">Delicious Delivered</span>
+                </div>
+            </div>
+            <div class="nav-search">
+                <input type="text" id="searchInput" placeholder="🔍 Search restaurants, biryani, pizza..." onkeyup="searchRestaurants()">
             </div>
             <div class="nav-links" id="navLinks">
                 <a href="#home" onclick="showSection('home')">Home</a>
@@ -27,42 +35,91 @@
         </div>
     </nav>
 
+    <!-- Highlights Bar -->
+    <div class="highlights-bar">
+        <div class="container">
+            <div class="highlights-tabs">
+                <div class="highlight-tab active" onclick="switchHighlight('delivery', this)">
+                    <div class="highlight-icon">🚚</div>
+                    <span>Food Delivery</span>
+                </div>
+                <div class="highlight-tab" onclick="switchHighlight('dineout', this)">
+                    <div class="highlight-icon">🍴</div>
+                    <span>Dine Out</span>
+                </div>
+                <div class="highlight-tab" onclick="switchHighlight('giftables', this)">
+                    <div class="highlight-icon">🎁</div>
+                    <span>Giftables</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories Bar -->
+    <div class="categories-bar">
+        <div class="container">
+            <div class="categories-scroll">
+                <div class="category-item" onclick="filterByCategory('food')">
+                    <div class="category-icon">🍽️</div>
+                    <span>Food Delivery</span>
+                </div>
+                <div class="category-item" onclick="filterByCategory('grocery')">
+                    <div class="category-icon">🛒</div>
+                    <span>Grocery & Kitchen</span>
+                </div>
+                <div class="category-item" onclick="filterByCategory('snacks')">
+                    <div class="category-icon">🍿</div>
+                    <span>Snacks</span>
+                </div>
+                <div class="category-item" onclick="filterByCategory('drinks')">
+                    <div class="category-icon">🥤</div>
+                    <span>Drinks</span>
+                </div>
+                <div class="category-item" onclick="filterByCategory('beauty')">
+                    <div class="category-icon">💄</div>
+                    <span>Beauty</span>
+                </div>
+                <div class="category-item" onclick="filterByCategory('wellness')">
+                    <div class="category-icon">💊</div>
+                    <span>Wellness</span>
+                </div>
+                <div class="category-item" onclick="filterByCategory('all')">
+                    <div class="category-icon">🏪</div>
+                    <span>Shop by Store</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Hero Section with Slider -->
-    <section id="home" class="section">
-        <div class="hero-slider">
-            <div class="slide active">
-                <div class="slide-content">
-                    <h1>🍕 Get 50% OFF on Your First Order!</h1>
-                    <p>Use code: FIRST50</p>
-                    <button class="btn btn-primary" onclick="showSection('restaurants')">Order Now</button>
+    <section id="home" class="section home-section">
+        <!-- Quick Actions Banner -->
+        <div class="quick-banner">
+            <div class="container">
+                <div class="banner-content">
+                    <div class="banner-text">
+                        <h1>Order food online from your favorite restaurants</h1>
+                        <p>Get your favorite meals delivered to your doorstep in minutes</p>
+                    </div>
+                    <button class="btn btn-primary btn-large" onclick="showSection('restaurants')">
+                        Explore Restaurants →
+                    </button>
                 </div>
-            </div>
-            <div class="slide">
-                <div class="slide-content">
-                    <h1>🍔 Free Delivery on Orders Above $30</h1>
-                    <p>Fast & Fresh delivery to your doorstep</p>
-                    <button class="btn btn-primary" onclick="showSection('restaurants')">Browse Menu</button>
-                </div>
-            </div>
-            <div class="slide">
-                <div class="slide-content">
-                    <h1>🍣 Weekend Special: Buy 1 Get 1 Free</h1>
-                    <p>Valid on selected restaurants</p>
-                    <button class="btn btn-primary" onclick="showSection('restaurants')">Explore Deals</button>
-                </div>
-            </div>
-            <button class="slider-btn prev" onclick="changeSlide(-1)">❮</button>
-            <button class="slider-btn next" onclick="changeSlide(1)">❯</button>
-            <div class="slider-dots">
-                <span class="dot active" onclick="currentSlide(0)"></span>
-                <span class="dot" onclick="currentSlide(1)"></span>
-                <span class="dot" onclick="currentSlide(2)"></span>
             </div>
         </div>
 
-        <!-- Offers Section -->
         <div class="container">
-            <h2 class="section-title">🎉 Today's Special Offers</h2>
+            <!-- Featured Restaurants -->
+            <div class="section-header">
+                <h2 class="section-title">⭐ Popular Restaurants Near You</h2>
+                <a href="#restaurants" onclick="showSection('restaurants')" class="view-all">View All →</a>
+            </div>
+            <div id="featuredRestaurants" class="grid"></div>
+
+            <!-- Offers Section -->
+            <div class="section-header">
+                <h2 class="section-title">🎉 Best Offers For You</h2>
+            </div>
             <div class="offers-grid">
                 <div class="offer-card">
                     <div class="offer-badge">30% OFF</div>
@@ -90,12 +147,54 @@
                 </div>
             </div>
 
-            <!-- Featured Restaurants -->
-            <h2 class="section-title">⭐ Featured Restaurants</h2>
-            <div id="featuredRestaurants" class="grid"></div>
+            <!-- Cuisines Section -->
+            <div class="section-header">
+                <h2 class="section-title">🍽️ What's on your mind?</h2>
+            </div>
+            <div class="cuisines-scroll">
+                <div class="cuisine-item" onclick="searchAndShow('biryani')">
+                    <div class="cuisine-img">🍛</div>
+                    <span>Biryani</span>
+                </div>
+                <div class="cuisine-item" onclick="searchAndShow('pizza')">
+                    <div class="cuisine-img">🍕</div>
+                    <span>Pizza</span>
+                </div>
+                <div class="cuisine-item" onclick="searchAndShow('burger')">
+                    <div class="cuisine-img">🍔</div>
+                    <span>Burgers</span>
+                </div>
+                <div class="cuisine-item" onclick="searchAndShow('chicken')">
+                    <div class="cuisine-img">🍗</div>
+                    <span>Chicken</span>
+                </div>
+                <div class="cuisine-item" onclick="searchAndShow('veg')">
+                    <div class="cuisine-img">🥗</div>
+                    <span>Vegetarian</span>
+                </div>
+                <div class="cuisine-item" onclick="searchAndShow('seafood')">
+                    <div class="cuisine-img">🦐</div>
+                    <span>Seafood</span>
+                </div>
+                <div class="cuisine-item" onclick="searchAndShow('dessert')">
+                    <div class="cuisine-img">🍰</div>
+                    <span>Desserts</span>
+                </div>
+                <div class="cuisine-item" onclick="searchAndShow('drinks')">
+                    <div class="cuisine-img">🥤</div>
+                    <span>Drinks</span>
+                </div>
+            </div>
+
+            <!-- All Restaurants -->
+            <div class="section-header">
+                <h2 class="section-title">🏪 All Restaurants</h2>
+                <a href="#restaurants" onclick="showSection('restaurants')" class="view-all">See All →</a>
+            </div>
+            <div id="homeRestaurants" class="grid"></div>
 
             <!-- Why Choose Us -->
-            <h2 class="section-title">Why Choose Us?</h2>
+            <h2 class="section-title">Why Choose FoodHub?</h2>
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">🚀</div>
@@ -145,6 +244,79 @@
             <h2>Your Cart</h2>
             <div id="cartItems"></div>
             <div id="cartSummary"></div>
+        </div>
+    </section>
+
+    <!-- Checkout Section -->
+    <section id="checkout" class="section" style="display:none;">
+        <div class="container">
+            <button class="btn" onclick="showSection('cart')">← Back to Cart</button>
+            <h2>Checkout</h2>
+            <div class="checkout-container">
+                <div class="checkout-left">
+                    <div class="checkout-card">
+                        <h3>Delivery Address</h3>
+                        <textarea id="deliveryAddress" placeholder="Enter your delivery address" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="checkout-card">
+                        <h3>Payment Method</h3>
+                        <div class="payment-methods">
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="card" checked>
+                                <div class="payment-card">
+                                    <span class="payment-icon">💳</span>
+                                    <span>Credit/Debit Card</span>
+                                </div>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="upi">
+                                <div class="payment-card">
+                                    <span class="payment-icon">📱</span>
+                                    <span>UPI</span>
+                                </div>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="wallet">
+                                <div class="payment-card">
+                                    <span class="payment-icon">👛</span>
+                                    <span>Wallet</span>
+                                </div>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="cod">
+                                <div class="payment-card">
+                                    <span class="payment-icon">💵</span>
+                                    <span>Cash on Delivery</span>
+                                </div>
+                            </label>
+                        </div>
+                        
+                        <div id="cardDetails" class="payment-details">
+                            <input type="text" placeholder="Card Number" id="cardNumber" maxlength="16">
+                            <div class="card-row">
+                                <input type="text" placeholder="MM/YY" id="cardExpiry" maxlength="5">
+                                <input type="text" placeholder="CVV" id="cardCVV" maxlength="3">
+                            </div>
+                            <input type="text" placeholder="Cardholder Name" id="cardName">
+                        </div>
+                        
+                        <div id="upiDetails" class="payment-details" style="display:none;">
+                            <input type="text" placeholder="UPI ID (e.g., yourname@upi)" id="upiId">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="checkout-right">
+                    <div class="checkout-card">
+                        <h3>Order Summary</h3>
+                        <div id="checkoutSummary"></div>
+                        <button class="btn btn-primary" onclick="placeOrder()" style="width: 100%; margin-top: 1rem;">
+                            Place Order & Pay
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 

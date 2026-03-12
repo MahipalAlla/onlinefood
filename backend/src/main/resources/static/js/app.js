@@ -5,13 +5,13 @@ const API_URL = 'http://localhost:8080/api';
 let currentUser = null;
 let cart = [];
 let currentRestaurant = null;
+let allRestaurants = []; // Store all restaurants for search
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     checkAuth();
     loadRestaurants();
     loadFeaturedRestaurants();
-    startSlider();
 });
 
 // Slider functionality
@@ -129,12 +129,25 @@ function checkAuth() {
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('user');
     
+    console.log('Auth check - Token:', token ? 'exists' : 'missing', 'User:', user ? 'exists' : 'missing');
+    
     if (token && user) {
-        currentUser = JSON.parse(user);
-        document.getElementById('loginLink').style.display = 'none';
-        document.getElementById('registerLink').style.display = 'none';
-        document.getElementById('logoutBtn').style.display = 'block';
-        document.getElementById('ordersLink').style.display = 'block';
+        try {
+            currentUser = JSON.parse(user);
+            console.log('Current user:', currentUser);
+            document.getElementById('loginLink').style.display = 'none';
+            document.getElementById('registerLink').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'block';
+            document.getElementById('ordersLink').style.display = 'block';
+        } catch (e) {
+            console.error('Invalid user data, clearing storage');
+            localStorage.clear();
+            currentUser = null;
+        }
+    } else {
+        // Clear any partial data
+        localStorage.clear();
+        currentUser = null;
     }
 }
 
@@ -225,6 +238,8 @@ async function loadRestaurants() {
     try {
         const response = await fetch(`${API_URL}/restaurants`);
         const restaurants = await response.json();
+        
+        allRestaurants = restaurants; // Store for search
         
         const container = document.getElementById('restaurantsList');
         
@@ -393,8 +408,100 @@ async function checkout() {
         return;
     }
     
+    if (cart.length === 0) {
+        showToast('Your cart is empty', 'error');
+        return;
+    }
+    
+    // Show checkout page
+    showSection('checkout');
+    displayCheckoutSummary();
+    
+    // Set default address
+    document.getElementById('deliveryAddress').value = currentUser.address || '';
+}
+
+// Display Checkout Summary
+function displayCheckoutSummary() {
+    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const deliveryFee = currentRestaurant?.deliveryFee || 2.99;
+    const tax = subtotal * 0.05; // 5% tax
+    const total = subtotal + deliveryFee + tax;
+    
+    document.getElementById('checkoutSummary').innerHTML = `
+        <div class="summary-items">
+            ${cart.map(item => `
+                <div class="summary-item">
+                    <span>${item.name} x ${item.quantity}</span>
+                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                </div>
+            `).join('')}
+        </div>
+        <div class="summary-row">
+            <span>Subtotal</span>
+            <span>$${subtotal.toFixed(2)}</span>
+        </div>
+        <div class="summary-row">
+            <span>Delivery Fee</span>
+            <span>$${deliveryFee.toFixed(2)}</span>
+        </div>
+        <div class="summary-row">
+            <span>Tax (5%)</span>
+            <span>$${tax.toFixed(2)}</span>
+        </div>
+        <div class="summary-row total">
+            <span>Total</span>
+            <span>$${total.toFixed(2)}</span>
+        </div>
+    `;
+}
+
+// Place Order
+async function placeOrder() {
+    if (!currentUser) {
+        showToast('Please login to place order', 'error');
+        showSection('login');
+        return;
+    }
+    
+    const address = document.getElementById('deliveryAddress').value;
+    if (!address) {
+        showToast('Please enter delivery address', 'error');
+        return;
+    }
+    
+    const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+    
+    // Validate payment details
+    if (paymentMethod === 'card') {
+        const cardNumber = document.getElementById('cardNumber').value;
+        const cardExpiry = document.getElementById('cardExpiry').value;
+        const cardCVV = document.getElementById('cardCVV').value;
+        const cardName = document.getElementById('cardName').value;
+        
+        if (!cardNumber || !cardExpiry || !cardCVV || !cardName) {
+            showToast('Please fill in all card details', 'error');
+            return;
+        }
+    } else if (paymentMethod === 'upi') {
+        const upiId = document.getElementById('upiId').value;
+        if (!upiId) {
+            showToast('Please enter UPI ID', 'error');
+            return;
+        }
+    }
+    
     if (!currentRestaurant) {
         showToast('Restaurant information missing', 'error');
+        return;
+    }
+    
+    const token = localStorage.getItem('token');
+    if (!token) {
+        showToast('Session expired. Please login again', 'error');
+        localStorage.clear();
+        currentUser = null;
+        showSection('login');
         return;
     }
     
@@ -404,31 +511,53 @@ async function checkout() {
             menuItemId: item.id,
             quantity: item.quantity
         })),
-        deliveryAddress: currentUser.address || 'Default Address'
+        deliveryAddress: address
     };
     
+    console.log('Placing order:', orderData);
+    console.log('Token:', token.substring(0, 20) + '...');
+    
     try {
+        showToast('Processing payment...', 'info');
+        
         const response = await fetch(`${API_URL}/orders`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(orderData)
         });
         
+        console.log('Response status:', response.status);
+        
         if (response.ok) {
-            showToast('Order placed successfully!', 'success');
-            cart = [];
-            currentRestaurant = null;
-            updateCartCount();
-            showSection('orders');
-            loadOrders();
+            const order = await response.json();
+            console.log('Order created:', order);
+            
+            setTimeout(() => {
+                showToast(`Order #${order.id} placed successfully! Payment via ${paymentMethod.toUpperCase()}`, 'success');
+                cart = [];
+                currentRestaurant = null;
+                updateCartCount();
+                showSection('orders');
+                loadOrders();
+            }, 1500);
+        } else if (response.status === 401 || response.status === 403) {
+            console.error('Authentication failed');
+            showToast('Session expired. Please login again', 'error');
+            localStorage.clear();
+            currentUser = null;
+            checkAuth();
+            showSection('login');
         } else {
-            showToast('Failed to place order', 'error');
+            const errorText = await response.text();
+            console.error('Order error:', response.status, errorText);
+            showToast(`Failed to place order (${response.status}). Please try logging in again.`, 'error');
         }
     } catch (error) {
-        showToast('Error: ' + error.message, 'error');
+        console.error('Network error:', error);
+        showToast('Network error: ' + error.message, 'error');
     }
 }
 
@@ -482,3 +611,179 @@ async function loadOrders() {
         showToast('Error loading orders', 'error');
     }
 }
+
+
+// Search Restaurants
+function searchRestaurants() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    
+    if (!searchTerm) {
+        loadRestaurants();
+        return;
+    }
+    
+    const filtered = allRestaurants.filter(restaurant => 
+        restaurant.name.toLowerCase().includes(searchTerm) ||
+        (restaurant.description && restaurant.description.toLowerCase().includes(searchTerm))
+    );
+    
+    const container = document.getElementById('restaurantsList');
+    
+    if (filtered.length === 0) {
+        container.innerHTML = '<div class="empty-state"><h3>No restaurants found</h3><p>Try searching for "biryani" or "pizza"</p></div>';
+        showSection('restaurants');
+        return;
+    }
+    
+    container.innerHTML = filtered.map(restaurant => `
+        <div class="card" onclick="viewRestaurant(${restaurant.id})">
+            <img src="${restaurant.imageUrl || 'https://via.placeholder.com/300x200'}" alt="${restaurant.name}">
+            <div class="card-body">
+                <h3 class="card-title">${restaurant.name}</h3>
+                <p class="card-text">${restaurant.description || ''}</p>
+                <div class="card-meta">
+                    <span>⭐ ${restaurant.rating.toFixed(1)}</span>
+                    <span>🕐 ${restaurant.deliveryTime} min</span>
+                    <span>💵 ${restaurant.deliveryFee.toFixed(2)} delivery</span>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    
+    // Auto-switch to restaurants section when searching
+    showSection('restaurants');
+}
+
+
+// Filter by Category
+function filterByCategory(category) {
+    // Update active state
+    document.querySelectorAll('.category-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    event.target.closest('.category-item').classList.add('active');
+    
+    // For now, show all restaurants for food category
+    // In a real app, you'd filter by restaurant category
+    if (category === 'food' || category === 'all') {
+        loadRestaurants();
+        showSection('restaurants');
+    } else {
+        // Show coming soon message for other categories
+        const container = document.getElementById('restaurantsList');
+        container.innerHTML = `
+            <div class="empty-state">
+                <h3>🚀 Coming Soon!</h3>
+                <p>${getCategoryName(category)} will be available soon</p>
+                <button class="btn btn-primary" onclick="filterByCategory('food')">Browse Food Delivery</button>
+            </div>
+        `;
+        showSection('restaurants');
+    }
+}
+
+// Switch Highlight
+function switchHighlight(type, element) {
+    // Update active state
+    document.querySelectorAll('.highlight-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    element.classList.add('active');
+    
+    if (type === 'delivery') {
+        // Show food delivery restaurants
+        loadRestaurants();
+        showSection('restaurants');
+    } else if (type === 'dineout') {
+        // Show dine-out restaurants
+        const container = document.getElementById('restaurantsList');
+        container.innerHTML = `
+            <div class="empty-state">
+                <h3>🍴 Dine Out</h3>
+                <p>Discover restaurants for dining in. Reserve your table now!</p>
+                <button class="btn btn-primary" onclick="switchHighlight('delivery', document.querySelector('.highlight-tab'))">Back to Delivery</button>
+            </div>
+        `;
+        showSection('restaurants');
+    } else if (type === 'giftables') {
+        // Show gift options
+        const container = document.getElementById('restaurantsList');
+        container.innerHTML = `
+            <div class="empty-state">
+                <h3>🎁 Giftables</h3>
+                <p>Send delicious gifts to your loved ones. Gift cards and hampers coming soon!</p>
+                <button class="btn btn-primary" onclick="switchHighlight('delivery', document.querySelector('.highlight-tab'))">Back to Delivery</button>
+            </div>
+        `;
+        showSection('restaurants');
+    }
+}
+
+function getCategoryName(category) {
+    const names = {
+        'grocery': 'Grocery & Kitchen',
+        'snacks': 'Snacks',
+        'drinks': 'Drinks',
+        'beauty': 'Beauty',
+        'wellness': 'Wellness'
+    };
+    return names[category] || category;
+}
+
+
+// Search and show results
+function searchAndShow(term) {
+    document.getElementById('searchInput').value = term;
+    searchRestaurants();
+}
+
+// Load home restaurants (first 6)
+async function loadHomeRestaurants() {
+    try {
+        const response = await fetch(`${API_URL}/restaurants`);
+        const restaurants = await response.json();
+        
+        const container = document.getElementById('homeRestaurants');
+        const homeRestaurants = restaurants.slice(0, 6);
+        
+        container.innerHTML = homeRestaurants.map(restaurant => `
+            <div class="card" onclick="viewRestaurant(${restaurant.id})">
+                <img src="${restaurant.imageUrl || 'https://via.placeholder.com/300x200'}" alt="${restaurant.name}">
+                <div class="card-body">
+                    <h3 class="card-title">${restaurant.name}</h3>
+                    <p class="card-text">${restaurant.description || ''}</p>
+                    <div class="card-meta">
+                        <span>⭐ ${restaurant.rating.toFixed(1)}</span>
+                        <span>🕐 ${restaurant.deliveryTime} min</span>
+                        <span>💵 $${restaurant.deliveryFee.toFixed(2)}</span>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('Error loading home restaurants:', error);
+    }
+}
+
+// Update initialization
+document.addEventListener('DOMContentLoaded', () => {
+    checkAuth();
+    loadRestaurants();
+    loadFeaturedRestaurants();
+    loadHomeRestaurants();
+});
+
+
+// Toggle payment method details
+document.addEventListener('change', (e) => {
+    if (e.target.name === 'payment') {
+        document.getElementById('cardDetails').style.display = 'none';
+        document.getElementById('upiDetails').style.display = 'none';
+        
+        if (e.target.value === 'card') {
+            document.getElementById('cardDetails').style.display = 'block';
+        } else if (e.target.value === 'upi') {
+            document.getElementById('upiDetails').style.display = 'block';
+        }
+    }
+});

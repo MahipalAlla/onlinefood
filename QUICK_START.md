@@ -1,123 +1,107 @@
 # Quick Start Guide
 
-## ⚠️ Prerequisites Installation Required
+## Your Food Ordering Application is Ready! 🎉
 
-Your system is missing some required software. Please install:
+### Access Your Application
+- **Frontend & Backend**: http://localhost:8080
+- **H2 Database Console**: http://localhost:8080/h2-console
 
-### 1. Install Node.js (for React frontend)
+### What's Included
+
+#### 🍕 6 Restaurants Pre-loaded:
+1. **Biryani House** - Authentic Hyderabadi & Lucknowi Biryani
+2. **Pizza Palace** - Authentic Italian pizzas with fresh ingredients
+3. **Royal Biryani Paradise** - Premium biryani varieties
+4. **Pizzeria Italiano** - New York style & Neapolitan pizzas
+5. **Biryani Express** - Quick & delicious biryani delivery
+6. **Pizza Corner** - Loaded pizzas with unlimited toppings
+
+#### 📋 36 Menu Items Total:
+- **Biryani varieties**: Hyderabadi, Lucknowi, Mutton, Chicken, Veg, Prawns, Fish, Paneer, Keema, Mushroom, Chicken Tikka
+- **Pizza varieties**: Margherita, Pepperoni, BBQ Chicken, Hawaiian, Truffle, Meat Lovers, Cheese Burst, Paneer Tikka, Mexican Fiesta, Seafood Supreme
+- **Sides & Extras**: Raita, Garlic Bread, Mirchi Ka Salan
+
+### Features
+
+✅ **Homepage with:**
+- Auto-rotating slider with 3 promotional slides
+- Today's Special Offers section (4 deals)
+- Featured Restaurants showcase
+- Why Choose Us section
+
+✅ **User Features:**
+- Register & Login with JWT authentication
+- Browse restaurants and menus
+- Add items to cart
+- Place orders
+- View order history
+
+✅ **Beautiful UI:**
+- Animated logo with bouncing pizza icon
+- Gradient text effects
+- Responsive design
+- Modern card layouts
+
+### How to Use
+
+1. **Browse Restaurants**: Click on any restaurant card to view their menu
+2. **Add to Cart**: Click "Add to Cart" on menu items you like
+3. **Register/Login**: Create an account to place orders
+4. **Checkout**: Review your cart and place your order
+5. **Track Orders**: View your order history in "My Orders"
+
+### Database Access
+
+To view the database directly:
+1. Go to http://localhost:8080/h2-console
+2. Use these credentials:
+   - **JDBC URL**: `jdbc:h2:mem:foodapp`
+   - **Username**: `sa`
+   - **Password**: (leave empty)
+3. Click "Connect"
+
+### Sample Data
+
+All restaurant and menu data is automatically loaded from:
+`backend/src/main/resources/sample-data.sql`
+
+The database resets on each restart (in-memory H2 database).
+
+### Stopping the Application
+
+To stop the backend server:
 ```bash
-brew install node
+lsof -ti:8080 | xargs kill -9
 ```
 
-### 2. Install MySQL (for database)
-```bash
-brew install mysql
-brew services start mysql
-```
+### Restarting the Application
 
-### 3. Setup MySQL Database
-```bash
-# Login to MySQL
-mysql -u root
-
-# Create database
-CREATE DATABASE foodapp;
-exit;
-```
-
----
-
-## 🚀 Running the Application
-
-### Backend (Spring Boot) - Port 8080
-
-1. Navigate to backend:
 ```bash
 cd backend
+./start.sh
 ```
 
-2. Run with H2 in-memory database (no MySQL needed):
+Or manually:
 ```bash
-mvn clean spring-boot:run -Dspring-boot.run.profiles=h2
+cd backend
+export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+mvn spring-boot:run
 ```
 
-Backend will start at: **http://localhost:8080**
+### Tech Stack
 
-H2 Console: **http://localhost:8080/h2-console**
-- JDBC URL: `jdbc:h2:mem:foodapp`
-- Username: `sa`
-- Password: (leave empty)
+- **Backend**: Spring Boot 3.2.0 with Java 17
+- **Database**: H2 In-Memory Database
+- **Security**: JWT Authentication
+- **Frontend**: Vanilla HTML/CSS/JavaScript (no build tools needed)
+- **Server**: Embedded Tomcat on port 8080
 
-### Frontend (React) - Port 3000
+### Promotional Codes Available
 
-1. Install Node.js first (see above)
+- `FIRST50` - 50% OFF on first order
+- `PIZZA30` - 30% off on all pizzas
+- `BURGER2X` - Buy 1 Get 1 Free on burgers
+- `SUSHI25` - 25% discount on sushi rolls
+- `SWEET40` - Free dessert on orders above $40
 
-2. Navigate to frontend:
-```bash
-cd frontend
-```
-
-3. Install dependencies:
-```bash
-npm install
-```
-
-4. Create `.env` file:
-```bash
-cp .env.example .env
-```
-
-5. Start development server:
-```bash
-npm start
-```
-
-Frontend will start at: **http://localhost:3000**
-
----
-
-## 📝 Sample Data
-
-After backend starts, you can add sample restaurants using the SQL script:
-```bash
-# The backend will create tables automatically
-# Then you can insert sample data from:
-backend/src/main/resources/sample-data.sql
-```
-
----
-
-## 🧪 Testing
-
-1. Open browser: **http://localhost:3000**
-2. Register a new account
-3. Browse restaurants (add some using sample data first)
-4. Add items to cart
-5. Checkout with Stripe test card: `4242 4242 4242 4242`
-
----
-
-## 🔧 Current Status
-
-✅ Java 17 - Installed
-✅ Maven - Installed  
-❌ Node.js - **NOT INSTALLED** (required for frontend)
-❌ MySQL - **NOT INSTALLED** (optional, can use H2)
-
----
-
-## 💡 Next Steps
-
-1. Install Node.js: `brew install node`
-2. Start backend: `cd backend && mvn spring-boot:run -Dspring-boot.run.profiles=h2`
-3. Start frontend: `cd frontend && npm install && npm start`
-4. Open: **http://localhost:3000**
-
----
-
-## 📞 Need Help?
-
-Check the full documentation in:
-- `README.md` - Complete project overview
-- `SETUP.md` - Detailed setup instructions
-- `API_DOCUMENTATION.md` - API endpoints reference
+Enjoy your food ordering application! 🍕🍔🍣
